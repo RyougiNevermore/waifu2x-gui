@@ -1,0 +1,16 @@
+{
+  "name": "waifu2x-glsl-gui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "dev": "electron .",
+    "pkg": "electron-packager . waifu2x-glsl-gui --win --out ./dist --arch=x64 --app-version=1.0.0 --electron-version=5.0.3 --icon=./res/icon.ico"
+  },
+  "keywords": [],
+  "author": "wangminxiang",
+  "license": "GPLv3",
+  "devDependencies": {
+    "electron": "^5.0.3"
+  }
+}
