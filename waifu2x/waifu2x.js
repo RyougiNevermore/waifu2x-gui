@@ -136,6 +136,7 @@ function _convert(_arg) {
         processes.set(_p.pid, _p);
     }).catch(function (e) {
         console.log(e)
+        throw e;
     });
     return 1;
 }

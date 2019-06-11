@@ -75,13 +75,19 @@ ipcMain.on("process-send", (event, arg) => {
         _convertArg.dist = arg.dist;
         _convertArg.index = 1;
         _convertArg.total = 1;
-        _wa.convertFile(_convertArg, function (i) {
-            event.sender.send('process-ready', {
-                "total": i
+        try {
+            _wa.convertFile(_convertArg, function (i) {
+                event.sender.send('process-ready', {
+                    "total": i
+                });
+            }, function (_rs) {
+                event.sender.send('process-reply', _rs);
             });
-        }, function (_rs) {
-            event.sender.send('process-reply', _rs);
-        });
+        } catch (e) {
+            console.log(e)
+            event.sender.send('process-reply', {'message':e.toString()});
+        }
+
 
     } else {
         _convertArg.srcDir = arg.input;
@@ -97,7 +103,7 @@ ipcMain.on("process-send", (event, arg) => {
             });
         } catch (e) {
             console.log(e)
-            // event.sender.send('process-reply', {});
+            event.sender.send('process-reply', {'message':e.toString()});
         }
 
     }
