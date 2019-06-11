@@ -118,6 +118,7 @@ function _convert(_arg) {
                         "[MESSAGE]" + "\n" +
                         "" + err.toString() + "\n" +
                         "" + sdterr.toString();
+                    reject(_result)
                 } else {
                     _result.ok = true;
                     _result.message =
@@ -127,11 +128,14 @@ function _convert(_arg) {
                         "- out: " + _dist + "\n" +
                         "[MESSAGE]" + "\n" +
                         "" + sdterr.toString();
+                    resolve(_result);
                 }
-                resolve(_result);
+
             }
         );
         processes.set(_p.pid, _p);
+    }).catch(function (e) {
+        console.log(e)
     });
     return 1;
 }

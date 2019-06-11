@@ -87,13 +87,19 @@ ipcMain.on("process-send", (event, arg) => {
         _convertArg.srcDir = arg.input;
         _convertArg.distDir = arg.dist;
 
-        _wa.convertDir(_convertArg, function (i) {
-            event.sender.send('process-ready', {
-                "total": i
+        try {
+            _wa.convertDir(_convertArg, function (i) {
+                event.sender.send('process-ready', {
+                    "total": i
+                });
+            }, function (_rs) {
+                event.sender.send('process-reply', _rs);
             });
-        }, function (_rs) {
-            event.sender.send('process-reply', _rs);
-        });
+        } catch (e) {
+            console.log(e)
+            // event.sender.send('process-reply', {});
+        }
+
     }
 
 });
