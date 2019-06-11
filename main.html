@@ -54,27 +54,32 @@
 <div class="main">
 
     <div class="container box">
+        <div style="text-align: center">
+            <img src="res/waifu2x.png" width="140px" height="140px">
+        </div>
 
+        <h2 style="text-align: center">Waifu2x Ncnn Vulkan Gui</h2>
+        <p style="text-align: right">-- maintain by <a id="aboutMe">sh.awn</a></p>
+    </div>
+
+    <div class="container box">
         <section class="nes-container with-title">
             <h3 class="title">File</h3>
             <div class="item">
                 <div class="nes-field is-inline line">
                     <label for="input">Input:</label>
-                    <input id="input" type="text" class="nes-input" value="" placeholder="source file or dir">
+                    <input id="input" type="text" class="nes-input" value="E:\images\ibb" placeholder="source file or dir">
                 </div>
                 <div class="nes-field is-inline line">
                     <label for="output">Output:</label>
-                    <input id="output" type="text" class="nes-input" value="" placeholder="output file or dir">
+                    <input id="output" type="text" class="nes-input" value="E:\images\3" placeholder="output file or dir">
                 </div>
 
             </div>
         </section>
-
-
     </div>
 
     <div class="container box">
-
         <section class="nes-container with-title">
             <h3 class="title">Action</h3>
             <div class="item">
@@ -86,58 +91,75 @@
                         <button id="stp_btn" type="button" class="nes-btn is-error" style="width: 100%">Stop</button>
                     </div>
                 </div>
-
             </div>
-
-
         </section>
-
-
     </div>
 
     <div id="progress_box" class="container box">
-
         <section class="nes-container with-title">
             <h3 class="title">Progress</h3>
             <div class="item">
 
                 <div id="progress" class="line">
-                    <progress id="progress_bar" class="nes-progress is-pattern" value="0" max="100"></progress>
+                    <progress id="progress_bar" class="nes-progress is-pattern" value="0" max="0"></progress>
+                    <div style="text-align: right"><span id="progress_bar_current">0</span><span>&nbsp;/&nbsp;</span><span id="progress_bar_total">10</span></div>
                 </div>
 
                 <div id="textarea line">
                     <label for="log">Log</label>
                     <textarea id="log" class="nes-textarea"></textarea>
                 </div>
-
             </div>
-
-
         </section>
-
-
     </div>
 
     <div class="container box">
         <section class="nes-container with-title">
-            <h3 class="title">Mode</h3>
+            <h3 class="title">Noise</h3>
             <div class="item">
                 <div  class="nes-field is-inline line">
-                    <div id="mode">
+                    <div id="noise">
+                        <label>
+                            <input type="radio" class="nes-radio" name="noise" value="-1">
+                            <span>-1</span>
+                        </label>
+                        <label>
+                            <input type="radio" class="nes-radio" name="noise" value="0">
+                            <span>0</span>
+                        </label>
+                        <label>
+                            <input type="radio" class="nes-radio" name="noise" value="1">
+                            <span>1</span>
+                        </label>
+                        <label>
+                            <input type="radio" class="nes-radio" name="noise" checked="true" value="2">
+                            <span>2</span>
+                        </label>
+                        <label>
+                            <input type="radio" class="nes-radio" name="noise" value="3">
+                            <span>3</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
+    <div class="container box">
+        <section class="nes-container with-title">
+            <h3 class="title">Scale</h3>
+            <div class="item">
+                <div  class="nes-field is-inline line">
+                    <div id="scale">
                         <label>
-                            <input type="radio" class="nes-radio" name="mode" checked="true" value="noise_scale">
-                            <span>noise_scale</span>
+                            <input type="radio" class="nes-radio" name="scale" value="1">
+                            <span>1</span>
                         </label>
                         <label>
-                            <input type="radio" class="nes-radio" name="mode" value="noise">
-                            <span>noise</span>
+                            <input type="radio" class="nes-radio" name="scale" checked="true" value="2">
+                            <span>2</span>
                         </label>
 
-                        <label>
-                            <input type="radio" class="nes-radio" name="mode" value="scale">
-                            <span>scale</span>
-                        </label>
                     </div>
                 </div>
             </div>
@@ -148,48 +170,13 @@
         <section class="nes-container with-title">
             <h3 class="title">Settings</h3>
             <div class="item">
-
-
                 <div class="nes-field is-inline line">
-                        <label for="block_size">Block Size:</label>
-                        <input id="block_size" type="number" class="nes-input" value="256">
-                </div>
-
-                <div class="nes-field is-inline line">
-                    <label for="scale_ratio">Scale Ratio:</label>
-                    <input id="scale_ratio" type="number" class="nes-input" value="2.0">
-                </div>
-
-                <div class="nes-field is-inline line">
-                    <label for="threads">Threads:</label>
-                    <input id="threads" type="number" class="nes-input" value="8">
-                </div>
-
-            </div>
-
-        </section>
-    </div>
-
-    <div class="container box">
-        <section class="nes-container with-title">
-            <h3 class="title">Noise Level</h3>
-            <div class="item">
-                <div  class="nes-field is-inline line">
-                    <div id="noise_level">
-                        <label>
-                            <input type="radio" class="nes-radio" name="noise_level" value="1" >
-                            <span>1</span>
-                        </label>
-                        <label>
-                            <input type="radio" class="nes-radio" name="noise_level" checked="true" value="2">
-                            <span>2</span>
-                        </label>
-                    </div>
+                        <label for="tile_size">Tile:</label>
+                        <input id="tile_size" type="number" class="nes-input" value="400">
                 </div>
             </div>
         </section>
     </div>
-
 
 </div>
 

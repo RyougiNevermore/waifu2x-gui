@@ -1,9 +1,8 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 const path = require('path');
-const fs = require('fs');
 
-const waifu = require('./wbin/waifu')
+const waifu2x = require('./waifu2x/waifu2x')
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -15,7 +14,7 @@ function createWindow() {
     Menu.setApplicationMenu(null);
     mainWindow = new BrowserWindow({
         width: 800,
-        height: 600,
+        height: 900,
         webPreferences: {
             nodeIntegration: true
         }
@@ -54,37 +53,51 @@ app.on('activate', function () {
     if (mainWindow === null) createWindow()
 })
 
-let _wa = null;
+let _wa = new waifu2x();
 
 ipcMain.on("process-send", (event, arg) => {
 
-    const files = fs.readdirSync(arg.input);
+    let _convertArg = {
+        "noise": arg.noise,
+        "scale": arg.scale,
+        "tile": arg.tile
+    };
 
-    event.sender.send('process-ready', {
-        "total": files.length
-    });
 
-    _wa = new waifu(arg.output, arg.mode, arg.blockSize, arg.scaleRatio, arg.threads, arg.noiseLevel)
+    let _isNotDir = (arg.input.toLowerCase().lastIndexOf(".png") > 0)
+        || (arg.input.toLowerCase().lastIndexOf(".jpg") > 0)
+        || (arg.input.toLowerCase().lastIndexOf(".jpeg") > 0)
+        || (arg.input.toLowerCase().lastIndexOf(".bmp") > 0)
+        || (arg.input.toLowerCase().lastIndexOf(".git") > 0)
 
-    console.log(_wa);
-
-    files.forEach(function (file, index) {
-        var _s = arg.input + "/" + file;
-        console.log(_s);
-
-        _wa.do(_s, function (_name) {
-            event.sender.send('process-reply', {
-                "index": index + 1,
-                "total": files.length,
-                "name": _name,
-                "end": (index + 1 === files.length)
+    if (_isNotDir) {
+        _convertArg.src = arg.input;
+        _convertArg.dist = arg.dist;
+        _convertArg.index = 1;
+        _convertArg.total = 1;
+        _wa.convertFile(_convertArg, function (i) {
+            event.sender.send('process-ready', {
+                "total": i
             });
+        }, function (_rs) {
+            event.sender.send('process-reply', _rs);
         });
 
-    });
+    } else {
+        _convertArg.srcDir = arg.input;
+        _convertArg.distDir = arg.dist;
 
+        _wa.convertDir(_convertArg, function (i) {
+            event.sender.send('process-ready', {
+                "total": i
+            });
+        }, function (_rs) {
+            event.sender.send('process-reply', _rs);
+        });
+    }
 
 });
+
 
 ipcMain.on("process-close", (event, arg) => {
     _wa.stop();

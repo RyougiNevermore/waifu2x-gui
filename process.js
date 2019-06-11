@@ -1,4 +1,8 @@
-const {ipcRenderer} = require('electron')
+const {ipcRenderer} = require('electron');
+const process = require('process');
+const exec = require('child_process').exec;
+
+
 document.querySelector('#act_btn').addEventListener('click', function () {
     action();
 });
@@ -8,8 +12,8 @@ document.querySelector('#stp_btn').addEventListener('click', function () {
 
     document.getElementById('progress_bar').max = 0;
     document.getElementById('progress_bar').value = 0;
-    document.getElementById('log').value = '';
-    document.getElementById('progress_box').style.display = "none";
+    // document.getElementById('log').value = '';
+    // document.getElementById('progress_box').style.display = "none";
 
     document.getElementById('stop').style.display = "none";
 
@@ -20,6 +24,10 @@ function action() {
 
     document.getElementById('progress_bar').max = 0;
     document.getElementById('progress_bar').value = 0;
+
+    document.getElementById('progress_bar_total').innerText = "0";
+    document.getElementById('progress_bar_current').innerText = "0";
+
     document.getElementById('log').value = '';
 
     let _form = getForm();
@@ -32,6 +40,8 @@ function action() {
     ipcRenderer.on('process-ready', (event, arg) => {
         console.log(arg);
         document.getElementById('progress_bar').max = arg.total + 1;
+        document.getElementById('progress_bar_total').innerText = arg.total;
+        document.getElementById('progress_bar_current').innerText = "0";
         document.getElementById('progress_bar').value = 1;
         document.getElementById('progress_box').style.display = "block";
 
@@ -45,8 +55,10 @@ function action() {
     ipcRenderer.on('process-reply', (event, arg) => {
         console.log(arg)
         document.getElementById('progress_bar').value = parseInt(document.getElementById('progress_bar').value) + 1;
+        document.getElementById('progress_bar_current').innerText = "" + arg.index;
+        document.getElementById('log').value = document.getElementById('log').value + "\n" + arg.message;
 
-        document.getElementById('log').value = document.getElementById('log').value + "\n" + arg.name + "\t" + arg.index + " / " + arg.total;
+        document.getElementById('log').scrollTop  = document.getElementById('log').scrollHeight;
 
         if (arg.index === arg.total) {
 
@@ -56,7 +68,6 @@ function action() {
         }
     });
     ipcRenderer.send('process-send', _form);
-
 
 }
 
@@ -75,37 +86,56 @@ function getForm() {
         return {"ok":false};
     }
 
-    let _modeEle = document.getElementsByName("mode");
-
-    let _mode = "noise_scale";
-    for (let _i = 0; _i < _modeEle.length; _i++) {
-        if (_modeEle[_i].checked === true) {
-            _mode = _modeEle[_i].value;
+    let _noiseEle = document.getElementsByName("noise");
+    let _noise = 2;
+    for (let _i = 0; _i < _noiseEle.length; _i++) {
+        if (_noiseEle[_i].checked === true) {
+            _noise = parseInt(_noiseEle[_i].value);
             break;
         }
     }
-    let _block_size = document.getElementById("block_size").value;
-    let _scale_ratio = document.getElementById("scale_ratio").value;
-    let _threads = document.getElementById("threads").value;
 
-    let _noise_level = "2";
-    let _noise_level_ele = document.getElementsByName("noise_level");
+    let _scale = "2";
+    let _scaleEle = document.getElementsByName("scale");
 
-    for (let _i = 0; _i < _noise_level_ele.length; _i++) {
-        if (_noise_level_ele[_i].checked === true) {
-            _noise_level = _noise_level_ele[_i].value;
+    for (let _i = 0; _i < _scaleEle.length; _i++) {
+        if (_scaleEle[_i].checked === true) {
+            _scale = parseInt(_scaleEle[_i].value);
             break;
         }
     }
+
+    let _tile_size = parseInt(document.getElementById("tile_size").value);
 
     return {
         "ok":true,
         "input": _input,
-        "output": _output,
-        "mode": _mode,
-        "blockSize": parseInt(_block_size),
-        "scaleRatio": parseInt(_scale_ratio),
-        "threads": parseInt(_threads),
-        "noiseLevel": parseInt(_noise_level)
+        "dist": _output,
+        "noise": _noise,
+        "scale": _scale,
+        "tile": _tile_size
     };
 }
+
+document.querySelector('#aboutMe').addEventListener('click', function () {
+    openDefaultBrowser('https://github.com/RyougiNevermore');
+});
+
+function aboutMe() {
+
+}
+
+const openDefaultBrowser = function (url) {
+    console.log(process.platform)
+    switch (process.platform) {
+        case "darwin":
+            exec('open ' + url);
+            break;
+        case "win32":
+            exec('start ' + url);
+            break;
+        default:
+            exec('xdg-open', [url]);
+    }
+}
+
