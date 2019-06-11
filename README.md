@@ -1,7 +1,11 @@
 # waifu2x-glsl-gui
-gui for waifu2x-converter-glsl 
+gui for waifu2x-ncnn-vulkan-gui 
 
 ![avatar](https://github.com/RyougiNevermore/waifu2x-glsl-gui/raw/master/samplev2.PNG)
+
+## releases
+
+* [v2.1](https://github.com/RyougiNevermore/waifu2x-glsl-gui/releases/tag/v2.1)
 
 ## thanks to 
 * [NES.css](https://github.com/nostalgic-css/NES.css)
