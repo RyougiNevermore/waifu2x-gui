@@ -1,4 +1,4 @@
-# waifu2x-glsl-gui
+# waifu2x-gui
 gui for waifu2x-ncnn-vulkan-gui 
 
 ![avatar](https://github.com/RyougiNevermore/waifu2x-glsl-gui/raw/master/samplev2.PNG)
