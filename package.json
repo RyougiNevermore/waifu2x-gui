@@ -11,6 +11,6 @@
   "author": "wangminxiang",
   "license": "GPLv3",
   "devDependencies": {
-    "electron": "^5.0.3"
+    "electron": "^9.1.0"
   }
 }
